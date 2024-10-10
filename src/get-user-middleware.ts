@@ -13,12 +13,14 @@ export class UserMiddleware implements NestMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     const userId = req.headers['user_id'];
-    if (userId) {
-      const user = await this.userRepository.findOneBy({ id: Number(userId) });
-      if (user) {
-        (req as any).user = user;
-      }
+    if (!userId)
+      throw new Error('Access Denied.'); 
+    
+    const user = await this.userRepository.findOneBy({ id: Number(userId) });
+    if (user) {
+      (req as any).user = user;
     }
+
     next();
   }
 }
