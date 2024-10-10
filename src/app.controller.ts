@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { Proposal,  } from './entities/entities.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -24,14 +24,4 @@ export class AppController {
     return await this.proposalRepository.findOne({ where: { id: proposalId } });
   }
 
-
-  @ApiOperation({
-    description: "login with user to browser between endpoints",
-    summary: 'login user'
-  })
-  @ApiProperty()
-  @Post('auth/login')
-  async login(@Body() loginDto: PayloadUserDTO) {
-    return await this.authService.login(loginDto);
-  }
 }

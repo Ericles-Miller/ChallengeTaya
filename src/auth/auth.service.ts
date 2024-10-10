@@ -10,25 +10,17 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(userId: number) {
-    const user = await this.usersService.findOne(userId);
-    if(!user)
-      throw new UnauthorizedException();  
-
-    return user;
-  }
-
-  async login({id, name}: PayloadUserDTO) {
-    const user = await this.usersService.findOne(id);
-    if(!user)
-      throw new UnauthorizedException(); // mudar depois
-
-    if(user.name !== name)
-      throw new UnauthorizedException(); // mudar depois
-
-    const payload = { username: user.name, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
+  async signIn({ id, name }: PayloadUserDTO) : Promise<{ access_token: string }>{
+    try {
+      const user = await this.usersService.findOne(id);
+      if(!user)
+        throw new UnauthorizedException();
+  
+      if(user.name !== name)
+        throw new UnauthorizedException(); 
+  
+      const payload = { username: user.name, sub: user.id };
+      return { access_token: this.jwtService.sign(payload) };
+    } catch (error) {}
   }
 }

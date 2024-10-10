@@ -15,5 +15,5 @@ export class PayloadUserDTO {
     example: 125376,
     required: true,
   })
-    id: number;
+  id: number;
 }
