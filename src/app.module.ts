@@ -7,6 +7,7 @@ import { Proposal } from './entities/entities.entity';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { CustomersModule } from './customers/customers.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CustomersModule } from './customers/customers.module';
     TypeOrmModule.forFeature([User, Proposal]),
     UsersModule,
     CustomersModule,
+    AuthModule,
   ],
   controllers: [AppController],
 })

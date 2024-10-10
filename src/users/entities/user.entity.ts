@@ -1,10 +1,12 @@
 import { Customer } from "src/customers/entities/customer.entity";
 import { Proposal } from "src/entities/entities.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { 
+  Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn
+} from "typeorm";
 
 @Entity({ name: 'users' })
 export class User {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @OneToMany(() => Customer, (customer) => customer.userCreator)
@@ -25,8 +27,4 @@ export class User {
   @UpdateDateColumn({ type: 'datetime',  })
   updatedAt?: Date;
 
-  constructor(name: string, balance: number) {
-    this.name = name;
-    this.balance = balance;
-  }
 }
