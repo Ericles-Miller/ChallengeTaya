@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from './users/entities/user.entity';
 import { AuthService } from './auth/auth.service';
 import { PayloadUserDTO } from './users/dto/payload-user.dto';
+import { ApiOperation, ApiProperty } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
@@ -23,6 +24,12 @@ export class AppController {
     return await this.proposalRepository.findOne({ where: { id: proposalId } });
   }
 
+
+  @ApiOperation({
+    description: "login with user to browser between endpoints",
+    summary: 'login user'
+  })
+  @ApiProperty()
   @Post('auth/login')
   async login(@Body() loginDto: PayloadUserDTO) {
     return await this.authService.login(loginDto);

@@ -13,7 +13,7 @@ export class AuthService {
   async validateUser(userId: number) {
     const user = await this.usersService.findOne(userId);
     if(!user)
-      throw new UnauthorizedException();
+      throw new UnauthorizedException();  
 
     return user;
   }
@@ -21,10 +21,10 @@ export class AuthService {
   async login({id, name}: PayloadUserDTO) {
     const user = await this.usersService.findOne(id);
     if(!user)
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(); // mudar depois
 
     if(user.name !== name)
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(); // mudar depois
 
     const payload = { username: user.name, sub: user.id };
     return {
