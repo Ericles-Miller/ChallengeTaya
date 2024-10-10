@@ -13,8 +13,9 @@ export class UsersService {
   ) {}
 
 
-  async create(createUserDto: CreateUserDto) : Promise<User> {
-    return await this.repository.save(createUserDto);
+  async create({balance, name}: CreateUserDto) : Promise<User> {
+    const user = new User(name, balance);
+    return await this.repository.save(user);
   }
 
   async findAll() : Promise<User[]> {
@@ -27,13 +28,5 @@ export class UsersService {
     return await this.repository.findOne({ 
       where: { id }, relations: ["createdCustomers", "proposals"]
      });
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
   }
 }
