@@ -1,6 +1,8 @@
 import { Customer } from "src/customers/entities/customer.entity";
 import { Proposal } from "src/entities/entities.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { 
+  Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn
+} from "typeorm";
 
 @Entity({ name: 'users' })
 export class User {
@@ -26,6 +28,7 @@ export class User {
   updatedAt?: Date;
 
   constructor(name: string, balance: number) {
+    this.id = Math.floor(Math.random() * 1000);
     this.name = name;
     this.balance = balance;
   }

@@ -3,7 +3,6 @@ import { Proposal,  } from './entities/entities.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users/entities/user.entity';
-import { LocalAuthGuard } from './auth/local-auth.guard';
 import { AuthService } from './auth/auth.service';
 import { PayloadUserDTO } from './users/dto/payload-user.dto';
 
