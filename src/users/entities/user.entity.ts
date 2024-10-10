@@ -6,7 +6,7 @@ import {
 
 @Entity({ name: 'users' })
 export class User {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @OneToMany(() => Customer, (customer) => customer.userCreator)
@@ -27,9 +27,4 @@ export class User {
   @UpdateDateColumn({ type: 'datetime',  })
   updatedAt?: Date;
 
-  constructor(name: string, balance: number) {
-    this.id = Math.floor(Math.random() * 1000);
-    this.name = name;
-    this.balance = balance;
-  }
 }
