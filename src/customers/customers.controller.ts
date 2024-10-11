@@ -4,25 +4,22 @@ import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
-import { AuthGuard } from 'src/auth/auth.guard';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
-@ApiBearerAuth()
 @ApiTags('Customers')
 @Controller('customers')
 export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
-  
+ 
+  @ApiBearerAuth('APP_GUARD')
   @ApiOperation({summary: 'Create a new customer with data in request'})
   @ApiProperty()
   @Post()
-  @HttpCode(201)
   @UseGuards(JwtAuthGuard)
+  @HttpCode(201)
   create(@Body() createCustomerDto: CreateCustomerDto, @Req() req: Request) {
     const user = req.headers['user_id'];
-    console.log(user);
-    
-    //return this.customersService.create(createCustomerDto, user);
+    // return this.customersService.create(createCustomerDto, user);
   }
 
   @Get()
