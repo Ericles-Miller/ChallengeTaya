@@ -36,8 +36,9 @@ export class ProposalController {
   @Get(':id')
   async getProposalById( 
     @Param('id') proposalId: number, @Req() req: { user: User },
-  ): Promise<void> {
-    console.log('entrou');
+  ): Promise<Proposal> {
+    const user = req.user;
+    return await this.proposalService.findOne(proposalId, user);
   }
   
 

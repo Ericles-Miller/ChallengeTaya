@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateProposalDto } from './dto/create-proposal.dto';
 import { UpdateProposalDto } from './dto/update-proposal.dto';
 import { Repository } from 'typeorm';
@@ -6,6 +6,7 @@ import { Proposal, ProposalStatus } from './entities/proposal.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from 'src/customers/entities/customer.entity';
 import { error } from 'console';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ProposalService {
@@ -46,8 +47,15 @@ export class ProposalService {
     return proposal;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} proposal`;
+  async findOne(id: number, user: User): Promise<Proposal> {
+    const proposal = await this.repository.findOne({where: { id}, relations: ['userCreator'] });
+    if(!proposal)
+      throw new BadRequestException('the proposalId does not exists');
+
+    if(proposal.userCreator.id !== user.id)
+      throw new UnauthorizedException('Access Denied');
+
+    return proposal;
   }
 
   async update(id: number, updateProposalDto: UpdateProposalDto) : Promise<Proposal> {
