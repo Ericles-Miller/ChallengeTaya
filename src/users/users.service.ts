@@ -4,7 +4,7 @@ import { toZonedTime } from 'date-fns-tz';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SumProfitDTO } from './dto/SumProfit-user.dto';
+import { SumProfitResponseDTO } from './dto/SumProfit-user.dto';
 import { UserProfit } from './dto/userProfit-user.dto';
 import { addDays, endOfDay, startOfDay } from 'date-fns';
 
@@ -20,8 +20,8 @@ export class UsersService {
     return await this.repository.save(createUserDTO);
   }
 
-  async sumProfitByStatus(id: number) : Promise<SumProfitDTO[]> {
-    const sumProfits : SumProfitDTO[] =  await this.repository
+  async sumProfitByStatus(id: number) : Promise<SumProfitResponseDTO[]> {
+    const sumProfits : SumProfitResponseDTO[] =  await this.repository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.proposals', 'proposal')
       .select('user.name', 'name')
@@ -40,7 +40,7 @@ export class UsersService {
      });
   }
 
-  async findBestUsers(id: number, start: string, end: string) : Promise<UserProfit[]> {
+  async findBestUsers(start: string, end: string) : Promise<UserProfit[]> {
     const timeZone = 'America/Sao_Paulo';
       let startAt = toZonedTime(startOfDay(new Date(start)), timeZone);
       let endAt = toZonedTime(endOfDay(new Date(end)), timeZone);

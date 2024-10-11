@@ -28,9 +28,8 @@ export class UsersController {
   @ApiProperty()
   @Get('best-users')
     async getBestUsers( 
-      @Query('id') id: number,
       @Query('start') start: string, @Query('end') end: string
     ): Promise<UserProfit[]> {
-      return this.usersService.findBestUsers(Number(id), start, end);
+      return this.usersService.findBestUsers(start, end);
     }
 }
