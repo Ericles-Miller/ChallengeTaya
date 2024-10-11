@@ -11,7 +11,6 @@ export class AuthService {
   ) {}
 
   async signIn({ id, name }: PayloadUserDTO) : Promise<{ access_token: string }>{
-    try {
       const user = await this.usersService.findOne(id);
       if(!user)
         throw new UnauthorizedException();
@@ -21,6 +20,5 @@ export class AuthService {
   
       const payload = { username: user.name, sub: user.id };
       return { access_token: this.jwtService.sign(payload) };
-    } catch (error) {}
   }
 }

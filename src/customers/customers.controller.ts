@@ -2,10 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Req, UseGu
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
+@ApiBearerAuth()
 @ApiTags('Customers')
 @Controller('customers')
 export class CustomersController {
@@ -15,10 +17,12 @@ export class CustomersController {
   @ApiProperty()
   @Post()
   @HttpCode(201)
-  @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   create(@Body() createCustomerDto: CreateCustomerDto, @Req() req: Request) {
     const user = req.headers['user_id'];
-    // return this.customersService.create(createCustomerDto, user);
+    console.log(user);
+    
+    //return this.customersService.create(createCustomerDto, user);
   }
 
   @Get()
