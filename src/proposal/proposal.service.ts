@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { Proposal, ProposalStatus } from './entities/proposal.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from 'src/customers/entities/customer.entity';
-import { error } from 'console';
 import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
@@ -92,14 +91,11 @@ export class ProposalService {
   }
 
   async findAllRefused(user: string | any) : Promise<Proposal[]>{
-    try {
-      const proposal = await this.repository.find({
-        where: {userCreator: { id: user.id }, status: ProposalStatus.REFUSED},
-      });
-      return proposal;
-    }catch(error) {
-      console.error(error)
-    }
     
+    const proposal = await this.repository.find({
+      where: {userCreator: { id: user.id }, status: ProposalStatus.REFUSED},
+    });
+    
+    return proposal;
   }
 }

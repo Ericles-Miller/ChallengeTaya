@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
-import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer } from './entities/customer.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,7 +13,7 @@ export class CustomersService {
   ){}
 
   async create({ cpf, name, balance }: CreateCustomerDto, userCreator: string | any): Promise<Customer> {        
-    const cpfAlreadyExists = await this.repository.findOne({ where: {cpf }});
+    const cpfAlreadyExists = await this.repository.findOne({ where: { cpf }});
     if(cpfAlreadyExists) 
       throw new BadRequestException('CPF already exists');
 
@@ -31,16 +30,13 @@ export class CustomersService {
   }
 
   async findOne(id: number) : Promise<Customer> {
-    return await this.repository.findOne({where: {id},
+    const customer =  await this.repository.findOne({where: {id},
       relations: ["userCreator", "proposals"]
     });
-  }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
-  }
+    if(!customer)
+      throw new BadRequestException('The customerId does not exists');
 
-  remove(id: number) {
-    return `This action removes a #${id} customer`;
+    return customer;
   }
 }
