@@ -1,4 +1,4 @@
-import { Proposal } from "src/entities/entities.entity";
+import { Proposal } from "src/proposal/entities/proposal.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 

@@ -1,5 +1,5 @@
 import { Customer } from "src/customers/entities/customer.entity";
-import { Proposal } from "src/entities/entities.entity";
+import { Proposal } from "src/proposal/entities/proposal.entity";
 import { 
   Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn
 } from "typeorm";
