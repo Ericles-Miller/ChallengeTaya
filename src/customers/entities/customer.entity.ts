@@ -1,6 +1,6 @@
-import { Proposal } from "src/entities/entities.entity";
+import { Proposal } from "src/proposal/entities/proposal.entity";
 import { User } from "src/users/entities/user.entity";
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'customers' })
 export class Customer {
@@ -19,16 +19,18 @@ export class Customer {
   @Column({ nullable: false, type: 'varchar', length: 200 })
   cpf: string;
 
-  @Column({ type: 'datetime' })
+  @CreateDateColumn({ type: 'datetime' })
   createdAt: Date;
 
-  @Column({ type: 'datetime' })
-  updatedAt: Date;
+  @UpdateDateColumn({ type: 'datetime' })
+  updatedAt?: Date;
 
-  constructor(name: string, cpf: string, userCreator: User) {
-    this.id = Math.floor(Math.random() * 1000);
+  @Column({type: 'decimal'})
+  balance: number;
+
+  constructor(name: string, cpf: string, balance: number) {
     this.name = name;
     this.cpf = cpf;
-    this.userCreator = userCreator;
+    this.balance = balance;
   }
 }
