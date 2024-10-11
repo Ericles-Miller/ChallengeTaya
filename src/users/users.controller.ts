@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Param, HttpCode, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, HttpCode, UseGuards, Req, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { UserProfit } from './dto/userProfit-user.dto';
 
-@ApiTags('Users')
-@Controller('users')
+@ApiTags('Admin')
+@Controller('admin')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
@@ -18,13 +19,18 @@ export class UsersController {
     return await this.usersService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @Get(':id/profit-by-status')
+  findAll(@Param('id') id: number) {
+    return this.usersService.sumProfitByStatus(id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
-  }
+  @ApiOperation({ summary: 'find best users' })
+  @ApiProperty()
+  @Get('best-users')
+    async getBestUsers( 
+      @Query('id') id: number,
+      @Query('start') start: string, @Query('end') end: string
+    ): Promise<UserProfit[]> {
+      return this.usersService.findBestUsers(Number(id), start, end);
+    }
 }

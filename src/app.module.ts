@@ -27,7 +27,7 @@ export class AppModule implements NestModule {
       path: 'customers', method: RequestMethod.ALL,
     },
     {
-      path: 'proposals', method: RequestMethod.ALL,
+      path: 'proposals*', method: RequestMethod.ALL,
     }
   ); // Apply it for all routes or specify routes
   }
