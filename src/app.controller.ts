@@ -1,10 +1,11 @@
-import { Body, Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { Proposal,  } from './entities/entities.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './users/entities/user.entity';
 import { AuthService } from './auth/auth.service';
 import { PayloadUserDTO } from './users/dto/payload-user.dto';
+import { ApiOperation, ApiProperty } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
@@ -23,8 +24,4 @@ export class AppController {
     return await this.proposalRepository.findOne({ where: { id: proposalId } });
   }
 
-  @Post('auth/login')
-  async login(@Body() loginDto: PayloadUserDTO) {
-    return await this.authService.login(loginDto);
-  }
 }
