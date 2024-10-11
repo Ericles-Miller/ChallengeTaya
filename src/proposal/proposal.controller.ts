@@ -1,20 +1,28 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Req } from '@nestjs/common';
 import { ProposalService } from './proposal.service';
 import { CreateProposalDto } from './dto/create-proposal.dto';
 import { UpdateProposalDto } from './dto/update-proposal.dto';
+import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { Request } from 'express';
 
-@Controller('proposal')
+@ApiTags('Proposals')
+@Controller('proposals')
 export class ProposalController {
   constructor(private readonly proposalService: ProposalService) {}
 
   @Post()
-  create(@Body() createProposalDto: CreateProposalDto) {
-    return this.proposalService.create(createProposalDto);
+  @HttpCode(201)
+  @ApiOperation({summary: 'Create a new proposal with data in request'})
+  @ApiProperty()
+  create(@Body() createProposalDto: CreateProposalDto, @Req() req: Request) {
+    const user = req.user;
+    return this.proposalService.create(createProposalDto, user);
   }
 
   @Get()
-  findAll() {
-    return this.proposalService.findAll();
+  findAll(@Req() req: Request) {
+    const user = req.user;
+    return this.proposalService.findAll(user);
   }
 
   @Get(':id')

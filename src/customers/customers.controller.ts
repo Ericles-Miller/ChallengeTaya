@@ -2,10 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, Req, UseGu
 import { CustomersService } from './customers.service';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
-import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
-import { PayloadUserDTO } from 'src/users/dto/payload-user.dto';
-import { User } from 'src/users/entities/user.entity';
 
 @ApiTags('Customers')
 @Controller('customers')
@@ -13,7 +11,7 @@ export class CustomersController {
   constructor(private readonly customersService: CustomersService) {}
  
   // @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('APP_GUARD')
+  //@ApiBearerAuth('APP_GUARD')
   @ApiOperation({summary: 'Create a new customer with data in request'})
   @ApiProperty()
   @Post()

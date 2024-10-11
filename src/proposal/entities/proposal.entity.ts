@@ -36,4 +36,10 @@ export class Proposal {
 
   @UpdateDateColumn({ type: 'datetime' })
   updatedAt: Date;
+
+  constructor(profit: number, customer: Customer, user: User) {
+    this.customer = customer;
+    this.userCreator = user;
+    this.profit = profit;
+  }
 }

@@ -24,7 +24,11 @@ import { Customer } from './customers/entities/customer.entity';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(UserMiddleware).forRoutes({
-      path: 'customers', method: RequestMethod.POST
-    }); // Apply it for all routes or specify routes
+      path: 'customers', method: RequestMethod.ALL,
+    },
+    {
+      path: 'proposal', method: RequestMethod.ALL,
+    }
+  ); // Apply it for all routes or specify routes
   }
 }
