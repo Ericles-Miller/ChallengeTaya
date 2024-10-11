@@ -15,13 +15,4 @@ export class AppController {
     //private authService: AuthService,
 
   ) {}
-
-  @Get('/proposals/:id')
-  async getProposalById( 
-    @Param('id') proposalId: number, @Req() req: { user: User },
-  ): Promise<Proposal> {
-    console.log(req);
-    return await this.proposalRepository.findOne({ where: { id: proposalId } });
-  }
-
 }
