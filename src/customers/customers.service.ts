@@ -13,7 +13,7 @@ export class CustomersService {
   ){}
 
   async create({ cpf, name, balance }: CreateCustomerDto, userCreator: string | any): Promise<Customer> {        
-    const cpfAlreadyExists = await this.repository.findOne({ where: {cpf }});
+    const cpfAlreadyExists = await this.repository.findOne({ where: { cpf }});
     if(cpfAlreadyExists) 
       throw new BadRequestException('CPF already exists');
 
@@ -30,8 +30,13 @@ export class CustomersService {
   }
 
   async findOne(id: number) : Promise<Customer> {
-    return await this.repository.findOne({where: {id},
+    const customer =  await this.repository.findOne({where: {id},
       relations: ["userCreator", "proposals"]
     });
+
+    if(!customer)
+      throw new BadRequestException('The customerId does not exists');
+
+    return customer;
   }
 }
