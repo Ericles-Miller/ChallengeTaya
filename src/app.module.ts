@@ -7,7 +7,6 @@ import { Proposal } from './entities/entities.entity';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
 import { CustomersModule } from './customers/customers.module';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,14 +14,14 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forFeature([User, Proposal]),
     UsersModule,
     CustomersModule,
-    AuthModule,
+    //AuthModule,
   ],
   controllers: [AppController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(UserMiddleware).forRoutes({
-      path: 'customers', method: RequestMethod.GET
+      path: 'customers', method: RequestMethod.POST
     }); // Apply it for all routes or specify routes
   }
 }

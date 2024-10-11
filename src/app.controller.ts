@@ -12,7 +12,7 @@ export class AppController {
   constructor(
     @InjectRepository(Proposal)
     private proposalRepository: Repository<Proposal>,
-    private authService: AuthService,
+    //private authService: AuthService,
 
   ) {}
 

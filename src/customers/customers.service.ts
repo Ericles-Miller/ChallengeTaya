@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { UpdateCustomerDto } from './dto/update-customer.dto';
 import { Customer } from './entities/customer.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
 
 
 @Injectable()
@@ -14,21 +13,22 @@ export class CustomersService {
     private readonly repository: Repository<Customer>,
   ){}
 
-  async create({ cpf, name }: CreateCustomerDto, userCreator: User) {    
-    const cpfAlreadyExists = await this.repository.findOne({ where: {cpf}});
+  async create({ cpf, name }: CreateCustomerDto, userCreator: string | any): Promise<Customer> {        
+    const cpfAlreadyExists = await this.repository.findOne({ where: {cpf }});
     if(cpfAlreadyExists) 
-      throw new Error('cpf already exists');
+      throw new BadRequestException();
 
-    const customer = new Customer(name, cpf, userCreator);
+    const customer = new Customer(name, cpf);
+
     return this.repository.save(customer);
   }
 
-  findAll() {
-    return `This action returns all customers`;
+  async findAll() : Promise<Customer[]> {
+    return await this.repository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} customer`;
+  async findOne(id: number) : Promise<Customer> {
+    return await this.repository.findOne({where: {id}});
   }
 
   update(id: number, updateCustomerDto: UpdateCustomerDto) {
