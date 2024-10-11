@@ -10,7 +10,7 @@ import { Request } from 'express';
 export class ProposalController {
   constructor(private readonly proposalService: ProposalService) {}
 
-  @Post()
+  @Post() // ok
   @HttpCode(201)
   @ApiOperation({summary: 'Create a new proposal with data in request'})
   @ApiProperty()
@@ -19,7 +19,7 @@ export class ProposalController {
     return this.proposalService.create(createProposalDto, user);
   }
 
-  @Get()
+  @Get() // ok
   findAll(@Req() req: Request) {
     const user = req.user;
     return this.proposalService.findAll(user);

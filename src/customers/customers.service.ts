@@ -13,12 +13,12 @@ export class CustomersService {
     private readonly repository: Repository<Customer>,
   ){}
 
-  async create({ cpf, name }: CreateCustomerDto, userCreator: string | any): Promise<Customer> {        
+  async create({ cpf, name, balance }: CreateCustomerDto, userCreator: string | any): Promise<Customer> {        
     const cpfAlreadyExists = await this.repository.findOne({ where: {cpf }});
     if(cpfAlreadyExists) 
       throw new BadRequestException('CPF already exists');
 
-    const customer = new Customer(name, cpf);
+    const customer = new Customer(name, cpf, balance);
     customer.userCreator = userCreator;
 
     return this.repository.save(customer);

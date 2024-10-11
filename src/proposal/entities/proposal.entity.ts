@@ -15,10 +15,10 @@ export class Proposal {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.proposals)
+  @ManyToOne(() => User, (user) => user.proposals, { cascade: true })
   userCreator: User;
 
-  @ManyToOne(() => Customer, (customer) => customer.proposals)
+  @ManyToOne(() => Customer, (customer) => customer.proposals, { cascade: true })
   customer: Customer;
 
   @Column({ nullable: false, type: 'decimal', default: 0 })

@@ -25,11 +25,12 @@ export class Customer {
   @UpdateDateColumn({ type: 'datetime' })
   updatedAt?: Date;
 
-  @Column({type: 'decimal', default: 0})
+  @Column({type: 'decimal'})
   balance: number;
 
-  constructor(name: string, cpf: string) {
+  constructor(name: string, cpf: string, balance: number) {
     this.name = name;
     this.cpf = cpf;
+    this.balance = balance;
   }
 }

@@ -23,7 +23,7 @@ export class ProposalService {
       throw new BadRequestException('The customerId does not exits');
 
     let proposal = await this.repository.findOne({
-      where: {userCreator: user, customer: customer}
+      where: {userCreator: {id: user.id}, customer: {id: customer.id}}
     });
 
     if(proposal)
@@ -49,38 +49,37 @@ export class ProposalService {
     return `This action returns a #${id} proposal`;
   }
 
-  async update(id: number, updateProposalDto: UpdateProposalDto) : Promise<void> {
-    const proposal = await this.repository.findOne({
-      where: {id}
-    });
-
+  async update(id: number, updateProposalDto: UpdateProposalDto) : Promise<Proposal> {
+    const proposal = await this.repository.findOne({ where: {id}, relations: ["customer", "userCreator"] });
     if(!proposal)
       throw new BadRequestException('Proposal id does not exists');
 
-    const customer = await this.customerRepository.findOne({
-      where: {id: updateProposalDto.customerId}
-    });
-
-    if(!customer)
-      throw new BadRequestException('customerId does not exists');
+    if(!proposal.customer)
+      throw new BadRequestException('customer does not exists');
 
     if(proposal.status !== ProposalStatus.PENDING)
       throw new BadRequestException(
-        'does not possible update proposal with status different PENDING'
+        'Cannot update proposal with status different from PENDING'
       );
     
     if(updateProposalDto.status === ProposalStatus.SUCCESSFUL) {
+      if(proposal.userCreator.balance < proposal.profit) {
+        proposal.status = ProposalStatus.REFUSED;
+        return await this.repository.save(proposal);
+      }
+    
       proposal.status = updateProposalDto.status;
       proposal.updatedAt = new Date();
-      customer.balance += updateProposalDto.profit;
-      customer.updatedAt = new Date()
+      
+      proposal.userCreator.balance-= proposal.profit;
+      proposal.customer.balance += proposal.profit;
+      proposal.customer.updatedAt = new Date();
     } else {
       proposal.status = updateProposalDto.status;
       proposal.updatedAt = new Date();
     }
 
-    const updateCustomer = await this.customerRepository.save(customer);
-    const updateProposal = await this.repository.save(proposal);
+    return await this.repository.save(proposal);
   }
 
   remove(id: number) {
