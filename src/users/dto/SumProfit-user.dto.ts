@@ -1,6 +1,6 @@
 import { ProposalStatus } from "src/proposal/entities/proposal.entity"
 
-export class SumProfitDTO {
+export class SumProfitResponseDTO {
   name: string;
   status: ProposalStatus;
   totalProfit: number;

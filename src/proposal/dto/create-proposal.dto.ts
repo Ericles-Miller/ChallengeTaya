@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsNumber, Min } from "class-validator";
 
 export class CreateProposalDto {
   @ApiProperty({
@@ -9,7 +9,10 @@ export class CreateProposalDto {
     example: 132453, 
   })
   @IsNotEmpty()
+  @IsNumber()
+  @IsNotEmpty()
   customerId: number;
+
 
   @ApiProperty({
     minLength: 0.1,
@@ -18,5 +21,7 @@ export class CreateProposalDto {
     example: 10000, 
   })
   @IsNotEmpty()
+  @IsNumber()
+  @Min(0.1, { message: 'Balance must be greater than or equal to 0.1' })
   profit: number;
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, MaxLength, Min, MinLength } from 'class-validator';
 import { IsCPF } from "src/configs/Validators/isValidCPF";
 
 export class CreateCustomerDto {
@@ -11,6 +11,9 @@ export class CreateCustomerDto {
     example: "John Doe", 
   })
   @IsNotEmpty()
+  @IsString()
+  @MinLength(3, { message: 'Name must be at least 3 characters long' })
+  @MaxLength(100, { message: 'Name must not exceed 100 characters' })
   name: string;
 
   @ApiProperty({
@@ -21,6 +24,7 @@ export class CreateCustomerDto {
     required: true,  
   })
   @IsCPF({message: 'Invalid CPF'})
+  @IsString()
   cpf: string;
 
   @ApiProperty({
@@ -29,5 +33,7 @@ export class CreateCustomerDto {
     minLength: 0.1,
     required: true,  
   })
+  @IsNumber()
+  @Min(0.1, { message: 'Balance must be greater than or equal to 0.1' })
   balance: number;
 }
