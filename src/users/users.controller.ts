@@ -58,8 +58,8 @@ export class UsersController {
   })
   @Get(':id/profit-by-status')
   @HttpCode(200)
-  async findAll(@Param('id') id: number): Promise<SumProfitResponseDTO[]> {
-    return await this.usersService.sumProfitByStatus(id);
+  async findAll(): Promise<SumProfitResponseDTO[]> {
+    return await this.usersService.sumProfitByStatus();
   }
 
   @ApiOperation({ summary: 'find best users' })
@@ -83,8 +83,8 @@ export class UsersController {
   @Get('best-users')
   @HttpCode(200)
     async getBestUsers( 
-      @Query('start') start: string, @Query('end') end: string
+      @Query('start') startAt: string, @Query('end') endAt: string
     ): Promise<UserProfit[]> {
-      return await this.usersService.findBestUsers(start, end);
+      return await this.usersService.findBestUsers(startAt, endAt);
     }
 }

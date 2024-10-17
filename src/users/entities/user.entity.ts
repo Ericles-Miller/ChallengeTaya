@@ -24,7 +24,7 @@ export class User {
   @CreateDateColumn({ type: 'datetime'})
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'datetime'})
+  @UpdateDateColumn({ type: 'datetime', default: null, })
   updatedAt?: Date;
 
 }
