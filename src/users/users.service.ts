@@ -17,11 +17,11 @@ export class UsersService {
 
 
   async create(createUserDTO: CreateUserDto) : Promise<User> {
-    const user =  await this.repository.create({
+    const user = this.repository.create({
       name: createUserDTO.name, balance: createUserDTO.balance
     });
 
-    return this.repository.save(user);
+    return await this.repository.save(user);
   }
 
   async sumProfitByStatus() : Promise<SumProfitResponseDTO[]> {
@@ -36,12 +36,6 @@ export class UsersService {
       .getRawMany();
       
     return sumProfits;
-  }
-
-  async findOne(id: number) {
-    return await this.repository.findOne({ 
-      where: { id }, relations: ["createdCustomers", "proposals"]
-     });
   }
 
   async findBestUsers(start: string, end: string) : Promise<UserProfit[]> {

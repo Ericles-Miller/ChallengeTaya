@@ -101,9 +101,6 @@ describe('UsersController', () => {
     });
 
       await expect(service.findBestUsers(startAt, endAt)).rejects.toThrow(BadRequestException);
-      //await expect(service.findBestUsers(startAt, endAt)).rejects.toThrow('The endAt should be greater than startAt');
     });
   });
-
-
 });
