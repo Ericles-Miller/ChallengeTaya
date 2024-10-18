@@ -17,10 +17,14 @@ export class UsersService {
 
 
   async create(createUserDTO: CreateUserDto) : Promise<User> {
-    return await this.repository.save(createUserDTO);
+    const user = this.repository.create({
+      name: createUserDTO.name, balance: createUserDTO.balance
+    });
+
+    return await this.repository.save(user);
   }
 
-  async sumProfitByStatus(id: number) : Promise<SumProfitResponseDTO[]> {
+  async sumProfitByStatus() : Promise<SumProfitResponseDTO[]> {
     const sumProfits : SumProfitResponseDTO[] =  await this.repository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.proposals', 'proposal')
@@ -34,19 +38,13 @@ export class UsersService {
     return sumProfits;
   }
 
-  async findOne(id: number) {
-    return await this.repository.findOne({ 
-      where: { id }, relations: ["createdCustomers", "proposals"]
-     });
-  }
-
   async findBestUsers(start: string, end: string) : Promise<UserProfit[]> {
     const timeZone = 'America/Sao_Paulo';
       let startAt = toZonedTime(startOfDay(new Date(start)), timeZone);
       let endAt = toZonedTime(endOfDay(new Date(end)), timeZone);
 
       if(startAt > endAt)
-        throw new BadRequestException('the endAt should be able biggest startAt');
+        throw new BadRequestException('The endAt should be able biggest startAt');
 
       const totalProposals = await this.repository.createQueryBuilder('user')
       .leftJoinAndSelect('user.proposals', 'proposal')
