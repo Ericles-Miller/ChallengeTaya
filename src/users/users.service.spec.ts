@@ -18,42 +18,35 @@ const user: User = {
   updatedAt: new Date(),
 };
 
-const userProfits: UserProfit[] = [{
-  name: 'John Doe',
-  id: 1,
-  totalProposal: 500,
-}];
+const userProfits: UserProfit[] = [
+  {
+    name: 'John Doe',
+    id: 1,
+    totalProposal: 500,
+  },
+];
 
-const sumProfits: SumProfitResponseDTO[] = [{
-  name: 'John Doe',
-  status: ProposalStatus.SUCCESSFUL,
-  totalProfit: 500
-}];
+const sumProfits: SumProfitResponseDTO[] = [
+  {
+    name: 'John Doe',
+    status: ProposalStatus.SUCCESSFUL,
+    totalProfit: 500,
+  },
+];
+
+let createQueryBuilderMock: any;
 
 describe('UsersService', () => {
   let service: UsersService;
   let repository: Repository<User>;
-  let createQueryBuilderMock: any;
 
   beforeEach(async () => {
-    createQueryBuilderMock = {
-      leftJoinAndSelect: jest.fn().mockReturnThis(),
-      select: jest.fn().mockReturnThis(),
-      addSelect: jest.fn().mockReturnThis(),
-      where: jest.fn().mockReturnThis(),
-      andWhere: jest.fn().mockReturnThis(),
-      groupBy: jest.fn().mockReturnThis(),
-      orderBy: jest.fn().mockReturnThis(),
-      getRawMany: jest.fn().mockResolvedValueOnce(userProfits),
-    };
-
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
         {
           provide: getRepositoryToken(User),
           useValue: {
-            createQueryBuilder: jest.fn().mockReturnValue(createQueryBuilderMock), // Certificando que createQueryBuilder retorne o mock
             create: jest.fn().mockResolvedValue(user),
             save: jest.fn().mockReturnValue(user),
           },
@@ -86,17 +79,88 @@ describe('UsersService', () => {
   });
 
   describe('findBestUsers', () => {
+    beforeEach(async () => {
+      createQueryBuilderMock = {
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        addSelect: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        andWhere: jest.fn().mockReturnThis(),
+        groupBy: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        getRawMany: jest.fn().mockResolvedValueOnce(userProfits),
+      };
+
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          UsersService,
+          {
+            provide: getRepositoryToken(User),
+            useValue: {
+              createQueryBuilder: jest
+                .fn()
+                .mockReturnValue(createQueryBuilderMock),
+            },
+          },
+        ],
+      }).compile();
+
+      service = module.get<UsersService>(UsersService);
+      repository = module.get<Repository<User>>(getRepositoryToken(User));
+    });
+
     it('should be able to list all best users successfully', async () => {
       const result = await service.findBestUsers('2024-01-01', '2024-12-01');
 
       expect(result).toEqual(userProfits);
       expect(repository.createQueryBuilder).toHaveBeenCalledTimes(1);
-      expect(createQueryBuilderMock.leftJoinAndSelect).toHaveBeenCalledWith('user.proposals', 'proposal');
+      expect(createQueryBuilderMock.leftJoinAndSelect).toHaveBeenCalledWith(
+        'user.proposals',
+        'proposal',
+      );
       expect(createQueryBuilderMock.getRawMany).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('sumProfitByStatus', () => {
-    
-  })
+    beforeEach(async () => {
+      createQueryBuilderMock = {
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        addSelect: jest.fn().mockReturnThis(),
+        groupBy: jest.fn().mockReturnThis(),
+        addGroupBy: jest.fn().mockReturnThis(),
+        getRawMany: jest.fn().mockResolvedValueOnce(sumProfits),
+      };
+
+      const module: TestingModule = await Test.createTestingModule({
+        providers: [
+          UsersService,
+          {
+            provide: getRepositoryToken(User),
+            useValue: {
+              createQueryBuilder: jest
+                .fn()
+                .mockReturnValue(createQueryBuilderMock),
+            },
+          },
+        ],
+      }).compile();
+
+      service = module.get<UsersService>(UsersService);
+      repository = module.get<Repository<User>>(getRepositoryToken(User));
+    });
+
+    it('should be able to list all sum profit by status', async () => {
+      const result = await service.sumProfitByStatus();
+
+      expect(result).toEqual(sumProfits);
+      expect(repository.createQueryBuilder).toHaveBeenCalledTimes(1);
+      expect(createQueryBuilderMock.leftJoinAndSelect).toHaveBeenCalledWith(
+        'user.proposals',
+        'proposal',
+      );
+      expect(createQueryBuilderMock.getRawMany).toHaveBeenCalledTimes(1);
+    });
+  });
 });
