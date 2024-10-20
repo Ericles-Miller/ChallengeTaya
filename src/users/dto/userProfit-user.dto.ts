@@ -1,5 +1,3 @@
-
-
 export class UserProfit {
   id: number;
   name: string;

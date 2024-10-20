@@ -7,7 +7,7 @@ export class CreateUserDto {
     maxLength: 100,
     required: true,
     description: 'user name',
-    example: "John Doe", 
+    example: 'John Doe',
   })
   @IsString()
   @MinLength(3, { message: 'Name must be at least 3 characters long' })
@@ -17,7 +17,7 @@ export class CreateUserDto {
   @ApiProperty({
     description: 'amount balance user',
     example: 5000,
-    required: true,  
+    required: true,
   })
   @IsNumber()
   @Min(0.1, { message: 'Balance must be greater than or equal to 0.1' })
