@@ -15,17 +15,17 @@ export class UsersService {
     private readonly repository: Repository<User>,
   ) {}
 
-
-  async create(createUserDTO: CreateUserDto) : Promise<User> {
+  async create(createUserDTO: CreateUserDto): Promise<User> {
     const user = this.repository.create({
-      name: createUserDTO.name, balance: createUserDTO.balance
+      name: createUserDTO.name,
+      balance: createUserDTO.balance,
     });
 
     return await this.repository.save(user);
   }
 
-  async sumProfitByStatus() : Promise<SumProfitResponseDTO[]> {
-    const sumProfits : SumProfitResponseDTO[] =  await this.repository
+  async sumProfitByStatus(): Promise<SumProfitResponseDTO[]> {
+    const sumProfits: SumProfitResponseDTO[] = await this.repository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.proposals', 'proposal')
       .select('user.name', 'name')
@@ -34,25 +34,29 @@ export class UsersService {
       .groupBy('user.name')
       .addGroupBy('proposal.status')
       .getRawMany();
-      
+
     return sumProfits;
   }
 
-  async findBestUsers(start: string, end: string) : Promise<UserProfit[]> {
+  async findBestUsers(start: string, end: string): Promise<UserProfit[]> {
     const timeZone = 'America/Sao_Paulo';
-      let startAt = toZonedTime(startOfDay(new Date(start)), timeZone);
-      let endAt = toZonedTime(endOfDay(new Date(end)), timeZone);
+    const startAt = toZonedTime(startOfDay(new Date(start)), timeZone);
+    const endAt = toZonedTime(endOfDay(new Date(end)), timeZone);
 
-      if(startAt > endAt)
-        throw new BadRequestException('The endAt should be able biggest startAt');
+    if (startAt > endAt)
+      throw new BadRequestException('The endAt should be able biggest startAt');
 
-      const totalProposals = await this.repository.createQueryBuilder('user')
+    const totalProposals = await this.repository
+      .createQueryBuilder('user')
       .leftJoinAndSelect('user.proposals', 'proposal')
       .select('user.id', 'id')
       .addSelect('user.name', 'name')
       .addSelect('SUM(proposal.profit)', 'totalProposal')
       .where('proposal.status = :status', { status: 'SUCCESSFUL' })
-      .andWhere('proposal.createdAt BETWEEN :start AND :end', { start: addDays(startAt, 1), end: addDays(endAt, 1) })
+      .andWhere('proposal.createdAt BETWEEN :start AND :end', {
+        start: addDays(startAt, 1),
+        end: addDays(endAt, 1),
+      })
       .groupBy('user.id')
       .orderBy('totalProposal', 'DESC')
       .getRawMany();
