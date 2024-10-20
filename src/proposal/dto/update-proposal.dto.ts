@@ -4,9 +4,8 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateProposalDto {
   @ApiProperty()
-  @IsEnum(
-    ProposalStatus,
-    { message: 'Status must be a valid ProposalStatus value' }
-  )
+  @IsEnum(ProposalStatus, {
+    message: 'Status must be a valid ProposalStatus value',
+  })
   status: ProposalStatus;
 }
