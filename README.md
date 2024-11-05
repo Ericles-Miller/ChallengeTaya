@@ -85,11 +85,3 @@ Abaixo está uma lista das APIs necessárias para o aplicativo.
 ## Indo Além dos Requisitos
 
 Dada a expectativa de tempo deste exercício, não esperamos que alguém entregue algo muito sofisticado, mas se você encontrar tempo extra, qualquer item adicional que destaque suas habilidades únicas seria incrível! 🙌
-
-Seria ótimo, por exemplo, se você escrevesse alguns testes unitários ou uma demonstração simples no frontend mostrando chamadas para suas novas APIs.
-
-## Enviando a Tarefa
-
-Quando você terminar a tarefa, compacte o seu repositório (certifique-se de incluir a pasta .git) e nos envie o arquivo zipado.
-
-Obrigado e boa sorte! 🙏
